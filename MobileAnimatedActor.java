@@ -1,4 +1,6 @@
 import processing.core.PImage;
+
+import java.util.LinkedList;
 import java.util.List;
 import static java.lang.Math.abs;
 
@@ -13,7 +15,12 @@ public abstract class MobileAnimatedActor
 
    protected Point nextPosition(WorldModel world, Point dest_pt)
    {
-      int horiz = Integer.signum(dest_pt.x - getPosition().x);
+      LinkedList<Point> list = Astar.A_star(this.getPosition(), dest_pt, world);
+      System.out.println(list.size());
+      return list.get(0);
+
+
+      /*int horiz = Integer.signum(dest_pt.x - getPosition().x);
       Point new_pt = new Point(getPosition().x + horiz, getPosition().y);
 
       if (horiz == 0 || !canPassThrough(world, new_pt))
@@ -27,7 +34,7 @@ public abstract class MobileAnimatedActor
          }
       }
 
-      return new_pt;
+      return new_pt;*/
    }
 
    protected static boolean adjacent(Point p1, Point p2)

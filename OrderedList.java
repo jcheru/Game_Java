@@ -43,6 +43,18 @@ public class OrderedList<T>
       }
    }
 
+   public boolean contains(T item)
+   {
+       for(ListItem<T> lItem : list)
+       {
+           if (lItem.item.equals(item))
+           {
+               return true;
+           }
+       }
+       return false;
+   }
+
    public ListItem<T> head()
    {
       if (!list.isEmpty())

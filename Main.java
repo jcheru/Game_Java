@@ -1,5 +1,6 @@
 import processing.core.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -30,6 +31,9 @@ public class Main extends PApplet
    private WorldModel world;
    private WorldView view;
 
+   private PImage img1;
+   private PImage img2;
+
 
    public void setup()
    {
@@ -59,6 +63,7 @@ public class Main extends PApplet
       // update view?
 
       next_time = System.currentTimeMillis() + TIMER_ACTION_DELAY;
+
    }
 
    public void draw()
@@ -281,4 +286,7 @@ public class Main extends PApplet
    {
       PApplet.main("Main");
    }
+
+
+
 }

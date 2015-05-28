@@ -1,5 +1,8 @@
+import com.sun.prism.image.ViewPort;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import javax.swing.text.View;
 
 public class WorldView
 {
@@ -9,6 +12,9 @@ public class WorldView
    private int tileHeight;
    private Viewport viewport;
 
+   private PImage img1;
+   private PImage img2;
+
    public WorldView(int numCols, int numRows, PApplet screen, WorldModel world,
       int tileWidth, int tileHeight)
    {
@@ -17,12 +23,17 @@ public class WorldView
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
       this.viewport = new Viewport(numRows, numCols);
+
+      // load path images
+      this.img1 = screen.loadImage("black.bmp");
+      this.img2 = screen.loadImage("red.bmp");
    }
 
    public void drawViewport()
    {
       drawBackground();
       drawEntities();
+      find_mobile();
    }
 
    private void drawBackground()
@@ -75,4 +86,49 @@ public class WorldView
    {
       return new Point(col - viewport.getCol(), row - viewport.getRow());
    }
+
+   private void find_mobile()
+   {
+      for(WorldEntity ent: world.getEntities())
+      {
+         if (ent instanceof MobileAnimatedActor)
+         {
+            MobileAnimatedActor mob_ent = (MobileAnimatedActor) ent;
+            draw_path(mob_ent);
+         }
+      }
+   }
+
+   private void draw_path(MobileAnimatedActor ent)
+   {
+      Point pt = ent.getPosition();
+      if (viewport.contains(pt))
+      {
+         Point vpt = worldToViewport(viewport, pt.x, pt.y);
+         if (mouse_over_pt(vpt))
+         {
+            for (int i = 1; i < ent.get_path().size(); i++)
+            {
+               Node n1 = ent.get_path().get(i);
+               if(viewport.contains(new Point(n1.x, n1.y)))
+               {
+                  Point vn1 = worldToViewport(viewport, n1.x, n1.y);
+                  screen.image(img1, vn1.x * 32, vn1.y * 32);
+               }
+            }
+         }
+      }
+   }
+
+   private boolean mouse_over_pt(Point pt)
+   {
+      int x_low = pt.x * 32;
+      int x_high = x_low + 32;
+      int y_low = pt.y * 32;
+      int y_high = y_low + 32;
+
+      return (x_low < screen.mouseX && screen.mouseX < x_high
+              && y_low < screen.mouseY && screen.mouseY < y_high);
+   }
+
 }

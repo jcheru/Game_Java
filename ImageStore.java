@@ -1,12 +1,9 @@
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
+
 import processing.core.PImage;
 import processing.core.PApplet;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public final class ImageStore
 {
@@ -93,4 +90,6 @@ public final class ImageStore
       img.updatePixels();
       return img;
    }
+
 }
+

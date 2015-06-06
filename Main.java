@@ -1,10 +1,7 @@
 import processing.core.*;
 
 import javax.swing.text.html.parser.Entity;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.File;
 
@@ -31,9 +28,9 @@ public class Main extends PApplet
    private WorldModel world;
    private WorldView view;
 
-   private PImage img1;
-   private PImage img2;
+   private long time;
 
+   private int flag = 0;
 
    public void setup()
    {
@@ -68,7 +65,7 @@ public class Main extends PApplet
 
    public void draw()
    {
-      long time = System.currentTimeMillis();
+      time = System.currentTimeMillis();
       if (time >= next_time)
       {
          world.updateOnTime(time);
@@ -102,6 +99,54 @@ public class Main extends PApplet
          view.updateView(dx, dy);
       }
    }
+
+   public void mouseClicked()
+   {
+      Point pt = view.create_ship(mouseX, mouseY, imageStore, time);
+
+      if(pt != null)
+      {
+         List<Blacksmith> b_list = new ArrayList<>();
+
+         for (WorldEntity ent : world.getEntities())
+         {
+            if (ent instanceof Blacksmith)
+            {
+               if ( (ent.getPosition().x - pt.x) * (ent.getPosition().x - pt.x) +
+                       (ent.getPosition().y - pt.y) * (ent.getPosition().y - pt.y) < 625)
+               {
+                  Blacksmith smith = (Blacksmith) ent;
+
+                  b_list.add(smith);
+
+               }
+            }
+         }
+         make_moving_smiths(b_list, world, imageStore, time);
+      }
+   }
+
+   private static void make_moving_smiths(List<Blacksmith> list, WorldModel world, ImageStore imageStore, long time)
+   {
+      for(Blacksmith smith : list)
+      {
+         Point pt2 = smith.getPosition();
+         String name2 = smith.getName();
+
+         world.removeEntityAt(smith.getPosition());
+
+         Worker new_worker = new Worker(String.format("worker_%s", name2),
+                 pt2, randInt(600, 1000), 100, imageStore.get("worker"));
+
+
+         world.addEntity(new_worker);
+
+
+         new_worker.schedule(world, time + new_worker.getRate(), imageStore);
+      }
+
+   }
+
 
    private static Background createDefaultBackground(ImageStore imageStore)
    {
@@ -256,10 +301,10 @@ public class Main extends PApplet
             if (properties.length >= SMITH_NUM_PROPERTIES)
             {
                Point pt = new Point(Integer.parseInt(properties[SMITH_COL]),
-                  Integer.parseInt(properties[SMITH_ROW]));
+                       Integer.parseInt(properties[SMITH_ROW]));
                WorldEntity entity = new Blacksmith(properties[SMITH_NAME],
-                  pt,
-                  imageStore.get(SMITH_KEY));
+                       pt,
+                       imageStore.get(SMITH_KEY));
                world.addEntity(entity);
             }
          });
@@ -280,6 +325,14 @@ public class Main extends PApplet
          });
 
       return parsers;
+   }
+
+
+   public static int randInt(int min, int max) {
+      Random rand = new Random();
+      int randomNum = rand.nextInt((max - min) + 1) + min;
+
+      return randomNum;
    }
 
    public static void main(String[] args)

@@ -15,16 +15,18 @@ public abstract class MobileAnimatedActor
       super(name, position, rate, animation_rate, imgs);
    }
 
-   public List<Node> get_path()
-   {
-      return this.path;
-   }
-
    protected Point nextPosition(WorldModel world, Point dest_pt)
    {
+      if(this.getPosition().x == -1)
+      {
+         return this.getPosition();
+      }
       LinkedList<Node> list = A_star(this.getPosition(), dest_pt, world);
-      Point next = new Point(list.get(1).x, list.get(1).y);
-      return next;
+      if(list != null && list.size() > 0)
+      {
+         return new Point(list.get(1).x, list.get(1).y);
+      }
+      return this.getPosition();
    }
 
    protected static boolean adjacent(Point p1, Point p2)

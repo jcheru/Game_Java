@@ -3,6 +3,8 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import javax.swing.text.View;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldView
 {
@@ -12,9 +14,6 @@ public class WorldView
    private int tileHeight;
    private Viewport viewport;
 
-   private PImage img1;
-   private PImage img2;
-
    public WorldView(int numCols, int numRows, PApplet screen, WorldModel world,
       int tileWidth, int tileHeight)
    {
@@ -23,18 +22,15 @@ public class WorldView
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
       this.viewport = new Viewport(numRows, numCols);
-
-      // load path images
-      this.img1 = screen.loadImage("black.bmp");
-      this.img2 = screen.loadImage("red.bmp");
    }
 
    public void drawViewport()
    {
       drawBackground();
       drawEntities();
-      find_mobile();
    }
+
+
 
    private void drawBackground()
    {
@@ -87,48 +83,39 @@ public class WorldView
       return new Point(col - viewport.getCol(), row - viewport.getRow());
    }
 
-   private void find_mobile()
+   public Point create_ship(int x, int y, ImageStore imageStore, long ticks)
    {
-      for(WorldEntity ent: world.getEntities())
-      {
-         if (ent instanceof MobileAnimatedActor)
-         {
-            MobileAnimatedActor mob_ent = (MobileAnimatedActor) ent;
-            draw_path(mob_ent);
-         }
-      }
-   }
+      int x_start = x / 32;
+      int y_start = y / 32;
 
-   private void draw_path(MobileAnimatedActor ent)
-   {
-      Point pt = ent.getPosition();
-      if (viewport.contains(pt))
+      int k = 1;
+
+      if (x_start + 24 < 40 && y_start + 19 < 30)
       {
-         Point vpt = worldToViewport(viewport, pt.x, pt.y);
-         if (mouse_over_pt(vpt))
+         for(int i = 0; i < 4; i++)
          {
-            for (int i = 1; i < ent.get_path().size(); i++)
+            for(int j = 0; j < 4; j++)
             {
-               Node n1 = ent.get_path().get(i);
-               if(viewport.contains(new Point(n1.x, n1.y)))
+               Point pt2 = viewportToWorld(viewport, x_start + i, y_start + j);
+               if(world.isOccupied(pt2))
                {
-                  Point vn1 = worldToViewport(viewport, n1.x, n1.y);
-                  screen.image(img1, vn1.x * 32, vn1.y * 32);
+                  world.removeEntityAt(pt2);
                }
+
+               Ship ship1 = new Ship("ship", pt2,
+                       imageStore.get(String.format("ship%d", k)));
+               world.addEntity(ship1);
+               k++;
             }
          }
+         Point pt = viewportToWorld(viewport, x_start + 4, y_start + 4);
+         Alien alien = new Alien("alien", pt, 300, 100, imageStore.get("alien"));
+         alien.schedule(world, ticks + alien.getRate(), imageStore);
+         world.addEntity(alien);
+
+         return viewportToWorld(viewport, x_start, y_start);
       }
-   }
-
-   private boolean mouse_over_pt(Point pt)
-   {
-      int x_low = pt.x * 32;
-      int x_high = x_low + 32;
-      int y_low = pt.y * 32;
-      int y_high = y_low + 32;
-
-      return (x_low < screen.mouseX && screen.mouseX < x_high
-              && y_low < screen.mouseY && screen.mouseY < y_high);
+      return null;
    }
 
 }

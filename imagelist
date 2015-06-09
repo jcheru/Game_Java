@@ -1,0 +1,49 @@
+blacksmith images/blacksmith.bmp
+blob images/blob1.bmp 255 255 255 0
+blob images/blob2.bmp 255 255 255 0
+blob images/blob3.bmp 255 255 255 0
+blob images/blob4.bmp 255 255 255 0
+blob images/blob5.bmp 255 255 255 0
+blob images/blob6.bmp 255 255 255 0
+blob images/blob7.bmp 255 255 255 0
+blob images/blob8.bmp 255 255 255 0
+blob images/blob9.bmp 255 255 255 0
+blob images/blob10.bmp 255 255 255 0
+blob images/blob11.bmp 255 255 255 0
+blob images/blob12.bmp 255 255 255 0
+grass images/grass.bmp
+miner images/miner1.bmp 252 252 252 0
+miner images/miner2.bmp 252 252 252 0
+miner images/miner3.bmp 252 252 252 0
+miner images/miner4.bmp 252 252 252 0
+miner images/miner5.bmp 252 252 252 0
+obstacle images/obstacle.bmp
+ore images/ore.bmp 201 26 26 0
+quake images/quake1.bmp 255 255 255 0
+quake images/quake2.bmp 255 255 255 0
+quake images/quake3.bmp 255 255 255 0
+quake images/quake4.bmp 255 255 255 0
+quake images/quake5.bmp 255 255 255 0
+quake images/quake6.bmp 255 255 255 0
+rocks images/rock.bmp
+vein images/vein.bmp
+background_default images/none.bmp
+ship1 images/ship1.png
+ship2 images/ship2.png 255 255 255 0
+ship3 images/ship3.png 255 255 255 0
+ship4 images/ship4.png 255 255 255 0
+ship5 images/ship5.png 255 255 255 0
+ship6 images/ship6.png 255 255 255 0
+ship7 images/ship7.png 255 255 255 0
+ship8 images/ship8.png 255 255 255 0
+ship9 images/ship9.png 255 255 255 0
+ship10 images/ship10.png 255 255 255 0
+ship11 images/ship11.png 255 255 255 0
+ship12 images/ship12.png 255 255 255 0
+ship13 images/ship13.png 255 255 255 0
+ship14 images/ship14.png 255 255 255 0
+ship15 images/ship15.png 255 255 255 0
+ship16 images/ship16.png 255 255 255 0
+alien images/alien.png
+worker images/worker.png
+
